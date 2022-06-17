@@ -11,21 +11,38 @@ import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class FirstTest {
-
-	public static void main(String[] args) throws InterruptedException {
-		
-			
+	
+		WebDriver driver;
+	
+		@BeforeMethod
+		public void beforeTest() {
 			WebDriverManager.chromedriver().setup();
-			WebDriver driver = new ChromeDriver();
-			
-
+			driver = new ChromeDriver();
 			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		}
+    
+		@Test
+		public void launchfacebook() {
 			
 			driver.get("https://www.facebook.com/");
+			WebElement element = driver.findElement(By.id("email"));
+
+			Actions action = new Actions(driver);
+			action.moveToElement(element).click()
+			//	.keyDown(element, Keys.SHIFT)
+				.sendKeys(element, "hello")
+			//	.keyUp(element, Keys.SHIFT)
+				.doubleClick(element)
+				.contextClick()
+				.build().perform();
+		}
 /*			driver.navigate().to("http://twitter.com");
 		
 			System.out.println(driver.getCurrentUrl());
@@ -48,22 +65,11 @@ public class FirstTest {
 					driver.close();
 				}
 			}
-					
-			
-			//driver.quit();
 */
-			WebElement element = driver.findElement(By.id("email"));
-
-			Actions action = new Actions(driver);
-			action.moveToElement(element).click()
-			//	.keyDown(element, Keys.SHIFT)
-				.sendKeys(element, "hello")
-			//	.keyUp(element, Keys.SHIFT)
-				.doubleClick(element)
-				.contextClick()
-				.build().perform();
-	
-		}
-
+			@AfterMethod
+			public void afterMethod() {
+				driver.quit();	
+			}
+						
 }
 
